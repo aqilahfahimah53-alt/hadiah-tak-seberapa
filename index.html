@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Zati 💖</title>
+
+<style>
+body{
+    margin:0;
+    font-family:'Poppins',sans-serif;
+    background:linear-gradient(135deg,#ffd6e0,#ffe9f0);
+    overflow:hidden;
+    text-align:center;
+}
+
+/* START */
+#start{
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+
+/* GAME */
+#game{
+    display:none;
+}
+
+#player{
+    position:absolute;
+    bottom:20px;
+    left:50%;
+    font-size:40px;
+}
+
+.fall{
+    position:absolute;
+    font-size:25px;
+}
+
+/* GIFT */
+#gift{
+    display:none;
+    height:100vh;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+}
+
+.gift-box{
+    font-size:80px;
+    cursor:pointer;
+    animation: bounce 1s infinite;
+}
+
+@keyframes bounce{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+}
+
+/* MAIN */
+#main{
+    display:none;
+    padding:20px;
+    margin-top:10vh;
+}
+
+.message{
+    font-size:0.95rem;
+    line-height:1.6;
+    white-space:pre-line;
+}
+
+/* hearts */
+.heart{
+    position:fixed;
+    bottom:-10px;
+    animation:float 5s linear infinite;
+}
+
+@keyframes float{
+    0%{transform:translateY(0);opacity:1;}
+    100%{transform:translateY(-100vh);opacity:0;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- START -->
+<div id="start">
+    <h2>weh jangan gelojoh 😋 tekan ni dulu</h2>
+    <button onclick="startGame()">Start 🎮</button>
+</div>
+
+<!-- GAME -->
+<div id="game">
+    <h3>Collect 12 hearts 💖</h3>
+    <div id="player">🧸</div>
+</div>
+
+<!-- GIFT -->
+<div id="gift">
+    <h2>dah penat? nah hadiah kau 🎁</h2>
+    <div class="gift-box" onclick="openGift()">🎁</div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+    <h1>🎂 Happy Birthday Zatiucukanjee 💖🥺✨</h1>
+    <div class="message" id="text"></div>
+</div>
+
+<!-- MUSIC -->
+<audio id="bgm">
+<source src="https://www.dropbox.com/scl/fi/0m2y7k4p0mcz3knm8nzyq/i-love-you-im-sorry.mp3?raw=1">
+</audio>
+
+<script>
+let score=0;
+
+const fullText = `sorry aku tak dpt bagi hadiah sgt, ni jee yg aku mampu buat masa skrg ni hmm duit tak kumpau...
+
+btw semoga kau sentiasa bahagia dgn yg baru wee aku taknak kau terseksa lagi dgn jantan mata keror tuu 😤 pliss lupakan dia wehh…
+
+hrmmm thankss selalu dengar aku bebel dengar luahan akuu yg tak seberapa bagi kauu 🥺 sorry laa takde siblings…
+
+thankss wee sudi menjadi pendengar akuu 🫶 rindunya nak kene buli dgn kauu… nak jumpa kauuu wehh 😭💗
+
+hmmmmmm nak sangattt aku sumpah nak cium kau nak comolot klau bole 😭💋
+
+papepun hope kau enjoy menjadi 20 hari ni!!!! 🎉✨
+
+may we get to meet all togetherr again!! 🥹💞`;
+
+/* START GAME */
+function startGame(){
+    document.getElementById("start").style.display="none";
+    document.getElementById("game").style.display="block";
+    move();
+    spawn();
+}
+
+/* MOVE PLAYER */
+function move(){
+    document.addEventListener("mousemove",e=>{
+        document.getElementById("player").style.left=e.clientX+"px";
+    });
+}
+
+/* SPAWN HEARTS */
+function spawn(){
+    let interval=setInterval(()=>{
+        let h=document.createElement("div");
+        h.className="fall";
+        h.innerHTML="💖";
+        h.style.left=Math.random()*100+"vw";
+        document.body.appendChild(h);
+
+        let fall=setInterval(()=>{
+            h.style.top=(h.offsetTop+5)+"px";
+
+            let p=document.getElementById("player");
+
+            if(h.offsetTop>window.innerHeight-60 &&
+               Math.abs(h.offsetLeft-p.offsetLeft)<50){
+                h.remove();
+                score++;
+
+                if(score>=12){
+                    clearInterval(interval);
+                    document.getElementById("game").style.display="none";
+                    document.getElementById("gift").style.display="flex";
+                }
+            }
+
+            if(h.offsetTop>window.innerHeight){
+                h.remove();
+            }
+
+        },30);
+
+    },700);
+}
+
+/* OPEN GIFT */
+function openGift(){
+    document.getElementById("gift").style.display="none";
+    document.getElementById("main").style.display="block";
+    typeText();
+}
+
+/* TYPING EFFECT */
+function typeText(){
+    let i=0;
+    let speed=30;
+    let textDiv=document.getElementById("text");
+
+    function typing(){
+        if(i<fullText.length){
+            textDiv.innerHTML += fullText.charAt(i);
+            i++;
+            setTimeout(typing,speed);
+        }else{
+            startEffects();
+        }
+    }
+    typing();
+}
+
+/* EFFECTS */
+function startEffects(){
+    document.getElementById("bgm").play();
+
+    setInterval(()=>{
+        let h=document.createElement("div");
+        h.className="heart";
+        h.innerHTML="💖";
+        h.style.left=Math.random()*100+"vw";
+        document.body.appendChild(h);
+        setTimeout(()=>h.remove(),5000);
+    },300);
+}
+</script>
+
+</body>
+</html>
